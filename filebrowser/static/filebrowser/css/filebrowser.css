@@ -283,6 +283,7 @@ span.qq-upload-file {
     color: transparent !important;
     width: 16px;
     height: 16px;
+    padding-left: 30px;
     background: url('../img/completed.png') top left no-repeat;
 }
 .qq-upload-success .qq-upload-complete {

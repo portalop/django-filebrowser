@@ -14,6 +14,8 @@
 {% block javascripts %}
     {{ block.super }}
     <script type="text/javascript" src="../../jsi18n/"></script>
+    <script language="javascript" type="text/javascript" src="{% static "grappelli/tinymce/jscripts/tiny_mce/tiny_mce_popup.js" %}"></script>
+    <script language="javascript" type="text/javascript" src="{% static "filebrowser/js/FB_TinyMCE.js" %}"></script>
     <script type="text/javascript" src="{% static "filebrowser/js/fileuploader.js" %}"></script>
     <script type="text/javascript">
     (function($){
@@ -91,6 +93,8 @@
                 onComplete: function(id, fileName, resp){
                     if (resp.success) {
                         this.getItem(id).find('.qq-upload-file').html(resp.filename);
+                        var select_onclick = "FileBrowserDialogue.fileSubmit('{{ filebrowser_site.storage.base_url }}{{ filebrowser_site.directory }}{{ query.dir|escapejs }}/" + resp.filename + "');";
+                        this.getItem(id).find('.qq-upload-complete').html('<button class="grp-button fb_selectlink" onclick="' + select_onclick + '">{% trans "Select" %}</button>');
                     }
                 },
                 showMessage: function(message){ alert(message); }
