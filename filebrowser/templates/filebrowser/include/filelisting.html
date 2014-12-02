@@ -1,4 +1,4 @@
-{% load i18n fb_tags fb_versions %}
+{% load admin_static i18n fb_tags fb_versions %}
 {% load url from future %}
 
 {% for fileobject in page.object_list %}
@@ -99,6 +99,10 @@
         <td class="fb_thumbnail">
             {% if fileobject.filetype == "Image" %}
                 <a href="{{ fileobject.url }}" class="fb_viewlink"><img src="{{ thumbnail_version.url }}" title="{% trans 'View Image' %}" /></a>
+            {% elif fileobject.filetype == "Document" %}
+                <a href="{{ fileobject.url }}" class="fb_viewlink"><img src="{% static "filebrowser/img/document.gif" %}" title="{% trans 'Document' %}" /></a>
+            {% elif fileobject.filetype == "Folder" %}
+                <a href="{% url 'filebrowser:fb_browse' %}{% query_string "" "q,dir,p" %}&amp;dir={{ fileobject.path_relative_directory|urlencode }}" class="fb_viewlink"><img src="{% static "filebrowser/img/folder.gif" %}" title="{% trans 'Folder' %}" /></a>
             {% endif %}
         </td>
         
