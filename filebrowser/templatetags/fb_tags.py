@@ -1,11 +1,12 @@
 # coding: utf-8
 
-# DJANGO IMPORTS
 from django import template
+from django.template import TemplateSyntaxError
 from django.utils.http import urlquote
+from django.utils.safestring import mark_safe
 
-# FILEBROWSER IMPORTS
 from filebrowser.settings import EXTENSIONS, SELECT_FORMATS
+
 
 register = template.Library()
 
@@ -53,7 +54,6 @@ def get_query_string(p, new_params=None, remove=None):
         remove = []
     for r in remove:
         for k in list(p):
-            #if k.startswith(r):
             if k == r:
                 del p[k]
     for k, v in new_params.items():
@@ -151,7 +151,12 @@ def get_file_extensions(qs):
     else:
         for k, v in EXTENSIONS.items():
             for item in v:
-                if item: extensions.append(item)
+                if item:
+                    extensions.append(item)
     return extensions
 
-register.simple_tag(get_file_extensions)
+
+# Django 1.9 auto escapes simple_tag unless marked as safe
+@register.simple_tag(name='get_file_extensions')
+def get_file_extensions_safe(qs):
+    return mark_safe(get_file_extensions(qs))

@@ -1,15 +1,14 @@
-{% load admin_static i18n fb_tags fb_versions %}
-{% load url from future %}
+{% load i18n fb_tags fb_versions %}
 
 {% for fileobject in page.object_list %}
-    
+
     <!-- THUMBNAIL-VERSION FOR IMAGE-OBJECT -->
     {% if fileobject.filetype == "Image" %}
-        {% version_object fileobject settings_var.ADMIN_THUMBNAIL as thumbnail_version %}
+        {% version fileobject settings_var.ADMIN_THUMBNAIL as thumbnail_version %}
     {% endif %}
-    
-    <tr class="grp-row grp-row-even{% if fileobject.filetype == "Folder" %} fb_folder{% endif %}">
-        
+
+    <tr class="grp-row grp-row-even{% if fileobject.is_folder %} fb_folder{% endif %}">
+
         <!-- FILESELECT FOR FILEBROWSEFIELD -->
         {% if query.pop == "1" %}
             <td class="fb_icon">
@@ -34,7 +33,7 @@
                 {% endif %}
             </td>
         {% endif %}
-        
+
         <!-- FILESELECT FOR RTE/TINYMCE -->
         <!-- we need to use the absolute url here -->
         {% if query.pop == "2" %}
@@ -60,7 +59,7 @@
                 {% endif %}
             </td>
         {% endif %}
-        
+
         <!-- FILESELECT FOR CKEDITOR -->
         {% if query.pop == "3" %}
             <td class="fb_icon">
@@ -85,7 +84,7 @@
                 {% endif %}
             </td>
         {% endif %}
-        
+
         <!-- FILEICON -->
         <td>
             {% if fileobject.filetype %}
@@ -94,7 +93,7 @@
                 <span class="fb_type none">&mdash;</span>
             {% endif %}
         </td>
-        
+
         <!-- THUMBNAIL -->
         <td class="fb_thumbnail">
             {% if fileobject.filetype == "Image" %}
@@ -105,9 +104,9 @@
                 <a href="{% url 'filebrowser:fb_browse' %}{% query_string "" "q,dir,p" %}&amp;dir={{ fileobject.path_relative_directory|urlencode }}" class="fb_viewlink"><img src="{% static "filebrowser/img/folder.gif" %}" title="{% trans 'Folder' %}" /></a>
             {% endif %}
         </td>
-        
+
         <!-- FILENAME/DIMENSIONS -->
-        {% if fileobject.filetype == "Folder" %}
+        {% if fileobject.is_folder %}
             <td><a href="{% url 'filebrowser:fb_browse' %}{% query_string "" "q,dir,p" %}&amp;dir={{ fileobject.path_relative_directory|urlencode }}"><strong>{{ fileobject.filename }}</strong></a></td>
         {% else %}
             <td>
@@ -117,26 +116,24 @@
                 {% endif %}
             </td>
         {% endif %}
-        
+
         <!-- FOLDER -->
         {% if query.q and settings_var.SEARCH_TRAVERSE %}
             <td><a href="{% url 'filebrowser:fb_browse' %}{% query_string "" "dir,p" %}&amp;dir={{ fileobject.folder|urlencode }}"><strong>{{ fileobject.folder }}</strong></a></td>
         {% endif %}
-        
+
         <!-- SIZE -->
         <td><span class="small">{% if fileobject.filesize %}{{ fileobject.filesize|filesizeformat }}{% else %}&mdash;{% endif %}</span></td>
-        
+
         <!-- DATE -->
         <td><span class="small">{{ fileobject.datetime|date:"N j, Y" }}</span></td>
-        
+
         <!-- EDIT -->
         <td>
             <ul class="grp-actions">
                 <li class="grp-change-link"><a href="{% url 'filebrowser:fb_detail' %}{% query_string "" "p" %}&amp;filename={{ fileobject.filename|urlencode }}"><strong>{% trans "Change" %}</strong></a></li>
             </ul>
         </td>
-        
+
     </tr>
 {% endfor %}
-
- 

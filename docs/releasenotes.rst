@@ -5,14 +5,30 @@
 
 .. _releasenotes:
 
-FileBrowser 3.5 Release Notes
+FileBrowser 3.7 Release Notes
 =============================
 
-FileBrowser 3.5 is compatible with Django 1.4/1.5/1.6/1.7 as well as Grappelli 2.4/2.5/2.6.
+FileBrowser 3.7 is compatible with Django 1.9 as well as Grappelli 2.8.
 
-Update from FileBrowser 3.4.x
+Updates
+-------
+
+* Compatibility with Django 1.9 and Grappelli 2.8
+* If you use versions, defining a ``VERSIONS_BASEDIR`` outside of site.directory is now mandatory.
+
+Depreciations (3.7)
+-------------------
+
+As already noted with 3.6, there's a couple of backwards-incompatible changes with 3.7.
+
+* FileObject ``directory`` is deprecated (use ``path_relative_directory`` instead).
+* FileObject ``folder`` is deprecated (use ``dirname`` instead).
+* ``FileInput`` and ``ClearableFileInput`` have been removed.
+* ``version_object`` has been removed (use ``version`` instead).
+
+Update from FileBrowser 3.6.x
 -----------------------------
 
-* Update Django to 1.4/1.5/1.6/1.7 and check https://docs.djangoproject.com/en/dev/releases/1.4/ or https://docs.djangoproject.com/en/dev/releases/1.5/ or https://docs.djangoproject.com/en/dev/releases/1.6/
-* Update Grappelli to 2.4.x/2.5.x/2.6.x
-* Update FileBrowser to 3.5.x
+* Update Django to 1.9 and check https://docs.djangoproject.com/en/dev/releases/1.8/
+* Update Grappelli to 2.8.x
+* Update FileBrowser to 3.7.x

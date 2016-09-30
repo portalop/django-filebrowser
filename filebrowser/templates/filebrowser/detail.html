@@ -2,7 +2,6 @@
 
 <!-- LOADING -->
 {% load admin_static i18n fb_tags fb_versions %}
-{% load url from future %}
 
 <!-- STYLESHEETS -->
 {% block stylesheets %}
@@ -28,6 +27,10 @@
                     }
                 }
             });
+            // remove edit module if no actions are given
+            if ($("select#id_custom_action").find("option").length <= 1) {
+                $("fieldset#fieldset_edit").hide();
+            }
         });
     })(grp.jQuery);
     </script>
@@ -58,8 +61,7 @@
                 </div>
             </div>
         </fieldset>
-        {% if fileobject.filetype == "Image" %}
-        <fieldset class="grp-module grp-collapse grp-open">
+        <fieldset class="grp-module grp-collapse grp-open" id="fieldset_edit">
             <h2 class="grp-collapse-handler">{% trans "Edit" %}</h2>
             <div class="grp-row {% if form.custom_action.errors %}grp-errors{% endif %}">
                 <div class="l-2c-fluid l-d-4">
@@ -72,7 +74,6 @@
                 </div>
             </div>
         </fieldset>
-        {% endif %}
         {% if fileobject.filetype == "Folder" %}
         <fieldset class="grp-module grp-collapse grp-open">
             <h2 class="grp-collapse-handler">{% trans "Folder Information" %}</h2>
@@ -150,7 +151,7 @@
             {% endif %}
             {% if settings_var.ADMIN_VERSIONS %}
                 {% for version in settings_var.ADMIN_VERSIONS %}
-                    {% version_object fileobject version as image_version %}
+                    {% version fileobject version as image_version %}
                     {% version_setting version %}
                     <div class="grp-row">
                         <div class="l-2c-fluid l-d-4">

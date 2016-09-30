@@ -10,13 +10,17 @@ Versions
 
 With the FileBrowser, you are able to define different versions/sizes for images. This enables you to save an original image on your server while having different versions of that image to automatically fit your websites grid. Versions are also useful for responsive/adaptive layouts.
 
+To generate a version of a source image, you specify `options` which are used
+by the image processors (see :ref:`settingsversions_processors`) to generate the
+required version.
+
 Defining Versions
 -----------------
 
-.. versionadded:: 3.4.0
-    ``methods``
-
-First you need to know which versions/sizes of an image you'd like to generate with your website. Let's say you're using a 12 column grid with 60px for each column and 20px margin (which is a total of 940px). With this grid, you could (for example) define these image versions.
+First you need to know which versions/sizes of an image you'd like to generate
+with your website. Let's say you're using a 12 column grid with 60px for each
+column and 20px margin (which is a total of 940px). With this grid, you could
+(for example) define these image :ref:`settingsversions_versions`:
 
 .. code-block:: python
 
@@ -44,6 +48,65 @@ Use the ``methods`` argument, if you need to add a filter:
         'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': '', 'methods': [grayscale]},
     })
 
+
+.. _versions__custom_processors:
+
+Custom processors
+-----------------
+
+.. versionadded:: 3.7.2
+
+Custom processors can be created using a simple method like this:
+
+.. code:: python
+
+    def grayscale_processor(im, grayscale=False, **kwargs):
+        if grayscale:
+            if im.mode != "L":
+                im = im.convert("L")
+        return im
+
+The first argument for a processor is the source image.
+
+All other arguments are keyword arguments which relate to the list of options
+received from the :ref:`version_generate method <method_version_generate>`.
+
+Ensure that you explicitly declare all params that could be used by your
+processor, as the processors arguments can be inspected to get a list of valid
+options.
+
+In order to turn your processor optional, define the params that your processor
+expects with a falsy default, and in this case you could return the
+original image without any modification.
+
+You must also use ``**kwargs`` at the end of your argument list because all
+`options` used to generate the version are available to all processors, not
+just the ones defined in your processor.
+
+Whether a processor actually modifies the image or not, they must always return
+an image.
+
+Using the processor
++++++++++++++++++++
+
+Override the  :ref:`settingsversions_processors` setting:
+
+.. code-block:: python
+
+    FILEBROWSER_VERSION_PROCESSORS = [
+        'filebrowser.utils.scale_and_crop',
+        'my_project.my_processors.grayscale_processor',
+    ]
+
+And in your versions definition:
+
+.. code-block:: python
+
+    FILEBROWSER_VERSIONS = {
+        'big_gray': {'verbose_name': 'Big (6 col)', 'width': 460, 'grayscale': True},
+    })
+
+
 Versions and the Admin
 ----------------------
 
@@ -57,7 +120,8 @@ When using the FileBrowser with the admin interface, you need to define ``ADMIN_
 Versions and the Frontend
 -------------------------
 
-With your templates, you have two different tags to choose from: ``version`` and ``version_object``. With both tags, the version will be generated if it doesn't already exist OR if the original image is newer than the version. In order to update an image, you just overwrite the original image and the versions will be generated automatically (as you request them within your template).
+With the templatetag ``version`` a version will be generated if it doesn't already exist OR if the original image is newer than the version.
+In order to update an image, you just overwrite the original image and the versions will be generated automatically (as you request them within your template).
 
 A Model example:
 
@@ -68,7 +132,7 @@ A Model example:
     class BlogEntry(models.Model):
         image = FileBrowseField("Image", max_length=200, blank=True, null=True)
 
-With your templates, use ``version`` if you simply need to retrieve the URL or ``version_object`` if you need to get a :ref:`fileobject`:
+With your templates, use ``version`` if you simply need to retrieve the URL or ``version as var`` if you need to get a :ref:`fileobject`:
 
 .. code-block:: html
 
@@ -77,11 +141,11 @@ With your templates, use ``version`` if you simply need to retrieve the URL or `
 
     <!-- get the url with version -->
     <img src="{% version blogentry.image 'medium' %}" />
-    
-    <!-- get a fileobject with version_object -->
-    {% version_object blogentry.image 'medium' as version_medium %} 
+
+    <!-- get a fileobject with version -->
+    {% version blogentry.image 'medium' as version_medium %}
     {{ version_medium.width }}
-    <img src="{{ version_medium }}" />
+    <img src="{{ version_medium.url }}" />
 
 Templatetag ``version``
 +++++++++++++++++++++++
@@ -92,17 +156,14 @@ Retrieves/Generates a version and returns an URL:
 
     {% version model.field_name version_prefix %}
 
-Templatetag ``version_object``
-++++++++++++++++++++++++++++++
-
 Retrieves/Generates a version and returns a FileObject:
 
 .. code-block:: html
 
-    {% version_object model.field_name version_prefix as variable %}
+    {% version model.field_name version_prefix as variable %}
 
 .. note::
-    With both templatetags, ``version_prefix`` can either be a string or a variable. If ``version_prefix`` is a string, use quotes.
+    ``version_prefix`` can either be a string or a variable. If ``version_prefix`` is a string, use quotes.
 
 Versions in Views
 -----------------
@@ -133,11 +194,11 @@ Management Commands
 
 .. option:: fb_version_remove
 
-    If you need to generate certain (or all) versions, type:
+    If you need to remove certain (or all) versions, type:
 
     .. code-block:: python
 
-        python manage.py fb_version_generate
+        python manage.py fb_version_remove
 
     .. warning::
         Please be very careful with this command.

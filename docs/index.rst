@@ -11,14 +11,14 @@ Django FileBrowser Documentation
 **Media-Management with Grappelli**.
 
 .. note::
-    |filebrowser| 3.5.8 requires Django 1.4/1.5/1.6 or 1.7 and |grappelli| 2.4/2.5 or 2.6.
+    |filebrowser| 3.7.2 requires Django 1.9 and |grappelli| 2.8.
 
 Installation and Setup
 ----------------------
 
 .. toctree::
    :maxdepth: 3
-   
+
    quickstart
    settings
 
@@ -27,7 +27,7 @@ API
 
 .. toctree::
    :maxdepth: 4
-   
+
    api
 
 Fields & Widgets
@@ -35,7 +35,7 @@ Fields & Widgets
 
 .. toctree::
    :maxdepth: 3
-   
+
    fieldswidgets
 
 Admin Interface
@@ -51,7 +51,7 @@ Image Versions
 
 .. toctree::
    :maxdepth: 3
-   
+
    versions
 
 Help
@@ -59,8 +59,9 @@ Help
 
 .. toctree::
    :maxdepth: 2
-   
+
    help
+   testing
    changelog
 
 Main Features
@@ -72,7 +73,6 @@ Main Features
 * Image versions to fit your websites grid (esp. useful with adaptive/responsive layouts).
 * Integration with TinyMCE.
 * FileBrowseField to select images/documents.
-* FileInput and ClearableFileInput with image preview.
 * Signals for upload, rename and delete.
 * Custom actions.
 * Custom file storage engines.
@@ -90,7 +90,17 @@ Use the `FileBrowser Google Group <http://groups.google.com/group/django-filebro
 Versions and Compatibility
 --------------------------
 
-* FileBrowser 3.5.8 (Development Version, not yet released, see Branch Stable/3.5.x)
-* FileBrowser 3.5.7 (September 10th, 2014): Compatible with Django 1.4/1.5/1.6/1.7
+**FileBrowser is always developed against the latest stable Django release and is NOT tested with Djangos trunk.**
 
-Older versions are availabe at GitHub, but are not supported anymore.
+* FileBrowser 3.7.2 (August 9th, 2016): Compatible with Django 1.9
+* FileBrowser 3.6.4 (March 6th, 2016): Compatible with Django 1.8
+* FileBrowser 3.5.8 (September 7th, 2015): Compatible with Django 1.4/1.5/1.6/1.7
+
+Current development branches:
+
+* FileBrowser 3.7.3 (Development Version for Django = 1.9, see Branch Stable/3.7.x)
+* FileBrowser 3.6.5 (Development Version for Django = 1.8, see Branch Stable/3.6.x)
+* FileBrowser 3.5.9 (Development Version for Django <= 1.7, see Branch Stable/3.5.x)
+
+Older versions are available at GitHub, but are not supported anymore.
+Support for 3.5.x and 3.6.x is limited to security issues and very important bugfixes.

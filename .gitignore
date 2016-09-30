@@ -6,3 +6,5 @@ dist
 .DS_store
 fabfile.py
 .idea
+NOTES.md
+.tox/*

@@ -11,8 +11,8 @@ For using the |filebrowser|, `Django <http://www.djangoproject.com>`_ needs to b
 Requirements
 ------------
 
-* Django 1.4/1.5/1.6/1.7, http://www.djangoproject.com
-* Grappelli 2.4/2.5/2.6, https://github.com/sehmaschine/django-grappelli
+* Django 1.9, http://www.djangoproject.com
+* Grappelli 2.8, https://github.com/sehmaschine/django-grappelli
 * Pillow, https://github.com/python-imaging/Pillow
 
 Installation
@@ -39,12 +39,12 @@ Add the |filebrowser| site to your url-patterns (before any admin-urls):
 .. code-block:: python
 
     from filebrowser.sites import site
-    
-    urlpatterns = patterns('',
-       (r'^admin/filebrowser/', include(site.urls)),
-       (r'^grappelli/', include('grappelli.urls')),
-       (r'^admin/', include(admin.site.urls)),
-    )
+
+    urlpatterns = [
+       url(r'^admin/filebrowser/', include(site.urls)),
+       url(r'^grappelli/', include('grappelli.urls')),
+       url(r'^admin/', include(admin.site.urls)),
+    ]
 
 Collect the static files (please refer to the `Staticfiles Documentation <http://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/>`_ for more information):
 
@@ -58,19 +58,10 @@ Settings
 Check the :ref:`settings`.
 
 .. note::
-    You need to add a folder "uploads" within ``site.storage.location`` when using the default settings. And we strongly recommend to define a ``VERSIONS_BASEDIR``.
+    You need to add a folder "uploads" within ``site.storage.location`` when using the default settings.
 
 Testing
 -------
-
-Run the |filebrowser| tests:
-
-.. code-block:: console
-
-    python manage.py test filebrowser
-
-.. warning::
-    Please note that the tests will copy files to your filesystem.
 
 Start the devserver and login to your admin site:
 
